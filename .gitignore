@@ -1,0 +1,22 @@
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.lock
+package-lock.json
+
+build
+node_modules
+ncp-debug.log
+npm-debug.log
+
+src/config/*.json
+src/**/config/*.json
+
+// yarn
+.yarnclean
+upload

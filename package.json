@@ -1,0 +1,36 @@
+{
+  "name": "service",
+  "version": "1.0.0",
+  "description": "SMS service",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@git.smartbackend.com:sms/service.git"
+  },
+  "author": "Jun Chang <jun.js.tw@tripleonetech.net>",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.5.2",
+    "body-parser": "^1.17.1",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "helmet": "^3.9.0",
+    "joi": "^13.0.1",
+    "jsonwebtoken": "^8.1.0",
+    "log4js": "^2.3.3",
+    "micromatch": "^3.0.4",
+    "moment-timezone": "^0.5.14",
+    "mysql": "^2.14.1",
+    "ncp": "^2.0.0",
+    "nocache": "^2.0.0",
+    "nodemailer": "^4.0.1",
+    "promise-mysql": "^3.0.2",
+    "public-ip": "^2.4.0",
+    "request": "^2.81.0",
+    "restify-errors": "^5.0.0",
+    "source-map-support": "^0.5.0",
+    "supertest": "^3.0.0",
+    "uuid": "^3.0.1"
+  }
+}

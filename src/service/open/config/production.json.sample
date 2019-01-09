@@ -1,0 +1,13 @@
+{
+  "name": "Tripleonetech SMS open api",
+  "server": {
+    "port": 7901
+  },
+  "secret": {
+    "auth": "a75b-402e-95b6",
+    "cookie": "6feb-4e94-8a89"
+  },
+  "timeout": {
+    "token": 7200
+  }
+}

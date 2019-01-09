@@ -1,0 +1,11 @@
+{
+  "mysql": {
+    "host": "localhost",
+    "db": "sms-test",
+    "port": 3306,
+    "credentials": {
+      "username": "root",
+      "password": "1qaz!QAZ"
+    }
+  }
+}
