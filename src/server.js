@@ -27,4 +27,11 @@ const server = async () => {
 }
 
 
-server()
+module.exports = () => {
+  const handleErr = (e) => {
+    console.error(e)
+    throw e
+  }
+  return server().catch(handleErr)
+}
+

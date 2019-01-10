@@ -1,11 +1,15 @@
 {
-  "name": "service",
+  "name": "tripleonetech-sms-api",
   "version": "1.0.0",
-  "description": "SMS service",
+  "description": "Tripleonetech SMS service",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git@git.smartbackend.com:sms/service.git"
+  },
+  "scripts": {
+    "test": "yarn install && cross-env NODE_ENV=test ./node_modules/.bin/mocha -u tdd",
+    "start": "node ./src/index.js"
   },
   "author": "Jun Chang <jun.js.tw@tripleonetech.net>",
   "license": "ISC",
