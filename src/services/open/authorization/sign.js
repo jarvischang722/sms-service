@@ -1,6 +1,6 @@
-import crypto from 'crypto'
+const crypto = require('crypto')
 
-const isJson = (x) => {
+const isJson = x => {
   try {
     const x2 = JSON.parse(JSON.stringify(x))
     for (const k in x) {
@@ -18,7 +18,7 @@ const isJson = (x) => {
 // 所有参数的顺序要按参数名的字母顺序
 // 忽略所有json类型字段和sign字段
 // 所有参数默认编码utf-8
-export default (signKey, data) => {
+module.exports.default = (signKey, data) => {
   if (!signKey || !data || Object.keys.length <= 0) return null
   const keyArr = []
   for (const key of Object.keys(data)) {

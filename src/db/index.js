@@ -1,10 +1,8 @@
-import redis from 'redis'
-import mysql from 'promise-mysql'
-import Promise from 'bluebird'
-import { promisify } from 'util'
-import DbManager from './manager'
-import config from './config'
-import log from '../logger'
+const mysql = require('promise-mysql')
+const Promise = require('bluebird')
+const DbManager = require('./manager')
+const config = require('./config')
+const log = require('../logger')
 
 const connections = {}
 
@@ -14,9 +12,9 @@ const query = (execQuery, params = []) =>
       conn.query(execQuery, params)
     )
     .catch(err => {
-      if (__DEV__ && !err.code) {
+      if (!err.code) {
         err.data = execQuery
-        log.error(err, false)
+        console.error(err, false)
         delete err.data
       }
       throw err
@@ -31,9 +29,9 @@ const transaction = (actions) =>
         .catch(err => conn.rollback().then(() => { throw err }))
     )
     .catch(err => {
-      if (__DEV__ && !err.code) {
+      if (!err.code) {
         err.data = actions
-        log.error(err, false)
+        console.error(err, false)
         delete err.data
       }
       throw err
@@ -53,44 +51,6 @@ const configureMySql = () => {
     }
   } else {
     throw new Error('mysql connection config not found')
-  }
-}
-
-const configureRedis = () => {
-  if (connections.redis) {
-    const cfg = connections.redis
-    const client = redis.createClient(cfg)
-    // 设定 error handler 以避免 redis 断线时造成 express crash
-    // ref: https://github.com/NodeRedis/node_redis/issues/1300
-    const throttles = [
-      { code: 'ECONNREFUSED', limit: 1, cur: 0 }
-    ]
-    client.on('error', (err) => {
-      const overLimit = throttles.find(throttle => {
-        if (err.code === throttle.code) {
-          throttle.cur++
-          return throttle.cur > throttle.limit // 避免 admin 被洗信箱
-        }
-        return false
-      })
-      if (overLimit) return
-      log.error(`redis: ${JSON.stringify(err)}`)
-    })
-    client.on('connect', () => { throttles.forEach(throttle => { throttle.cur = 0 }) })
-    const getAsync = promisify(client.get).bind(client)
-    const ttlAsync = promisify(client.ttl).bind(client)
-    const delAsync = promisify(client.del).bind(client)
-    const keysAsync = promisify(client.keys).bind(client)
-    connections.redis = {
-      config: cfg,
-      client,
-      getAsync,
-      ttlAsync,
-      delAsync,
-      keysAsync,
-    }
-  } else {
-    throw new Error('redis connection config not found')
   }
 }
 
@@ -117,7 +77,6 @@ const configure = () => {
   })
 
   configureMySql()
-  configureRedis()
 
   return new DbManager({ connections })
 }

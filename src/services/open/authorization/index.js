@@ -1,7 +1,6 @@
-import authSign from './sign'
-import errors from '../../../error'
-import { getOpenToken } from '../../../schema/open/auth'
-// import log from '../../../logger'
+const authSign = require('./sign')
+const errors = require('../../../error')
+const { getOpenToken } = require('../../../schema/open/auth')
 
 const authorize = () => {
   const auth = async (req, res, next) => {
@@ -31,7 +30,7 @@ const authorize = () => {
       let timeout
       if (req.url.toLowerCase().endsWith('/generate_token')) {
         // check secure key
-        if (!secure_key || (row.secure_key !== secure_key)) {
+        if (!secure_key || row.secure_key !== secure_key) {
           return next(new errors.InvalidSecureKeyError())
         }
       } else {
@@ -58,7 +57,7 @@ const authorize = () => {
         token,
         timeout,
         company: row.company_id,
-        isMaster: row.is_master || row.role === ROLE.COMPANY,
+        isMaster: row.is_master || row.role === ROLE.COMPANY
       }
       return next()
     } catch (err) {

@@ -1,6 +1,6 @@
-import fs from 'fs'
-import path from 'path'
-import log from '../logger'
+const fs = require('fs')
+const path = require('path')
+const log = require('../logger')
 
 class DbManager {
   constructor(data) {
@@ -70,7 +70,7 @@ class DbManager {
         const { version, file, path: loadFilePath } = patch
         newVersion = version
         if (version > this.version) {
-          log.info(`patching: ${version}`)
+          console.log(`patching: ${version}`)
           let query = fs.readFileSync(file, 'utf8')
           if (query.includes('{{csvFile}}')) {
             const loadFile = path.join(loadFilePath, `${version}.csv`)
@@ -83,7 +83,7 @@ class DbManager {
       }
     })
     if (newVersion > 0 && this.version !== newVersion) {
-      log.error(`Update db failed, expected version is ${newVersion}, but got ${this.version}`)
+      console.error(`Update db failed, expected version is ${newVersion}, but got ${this.version}`)
     }
   }
 }

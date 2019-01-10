@@ -1,5 +1,5 @@
-import { generateOpenToken } from '../../../schema/open/auth'
-import { validate, T } from '../../../validator'
+const { generateOpenToken } = require('../../../schema/open/auth')
+const { validate, T } = require('../../../validator')
 
 const SCHEMA = {
   merchant_code: T.string().regex(/^[a-zA-Z0-9_]+$/).min(6).max(50)

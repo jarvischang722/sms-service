@@ -10,6 +10,7 @@
   "author": "Jun Chang <jun.js.tw@tripleonetech.net>",
   "license": "ISC",
   "dependencies": {
+    "babel-eslint": "^10.0.1",
     "bluebird": "^3.5.2",
     "body-parser": "^1.17.1",
     "cookie-parser": "^1.4.3",
@@ -32,5 +33,19 @@
     "source-map-support": "^0.5.0",
     "supertest": "^3.0.0",
     "uuid": "^3.0.1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.1",
+    "chai-as-promised": "^7.1.1",
+    "chokidar": "^1.7.0",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.2.0",
+    "inquirer": "^3.2.1",
+    "json-loader": "^0.5.7",
+    "mocha": "^4.0.1",
+    "should": "^13.1.2"
   }
 }

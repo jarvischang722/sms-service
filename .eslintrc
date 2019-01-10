@@ -4,8 +4,6 @@
   "globals": {
     "__DEV__": true,
     "__TEST__": true,
-    "__LOTTERY_SERVICE__": true,
-    "__BET_ROOM_SERVICE__": true,
     "db": true,
     "describe": true,
     "it": true,
