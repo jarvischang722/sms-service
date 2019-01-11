@@ -1,4 +1,5 @@
 const openService = require('./services/open')
+const Cron = require('./cron')
 // const backofficeService = require('./services/backoffice')
 const db = require('./db')
 // const log = require('./logger')
@@ -22,9 +23,15 @@ const server = async () => {
   const app = {}
 
   app.open = await openService()
-  //   global.services.backoffice = await backofficeService()
+  //  app.services.backoffice = await backofficeService()
 
   global.services = app
+
+
+  /** ****************
+   * Run cron
+   **************** */
+  Cron.run()
 }
 
 
