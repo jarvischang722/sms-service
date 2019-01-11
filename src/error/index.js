@@ -1,13 +1,8 @@
-// import http from 'http'
-// import errors from 'restify-errors'
-// import errorsHelper from 'restify-errors/lib/helpers'
-// import localization from './locale.zh.json'
-// import log from '../logger'
 const http = require('http')
 const errors = require('restify-errors')
 const errorsHelper = require('restify-errors/lib/helpers')
 const localization = require('./locale.zh.json')
-const log = require('../logger')
+
 
 function normalize(name) {
   if (!name.endsWith('Error')) {

@@ -46,6 +46,7 @@ const server = async () => {
   app.use('/sms/openapi', apiRouter)
 
   /* eslint-disable no-underscore-dangle */
+  // if (__TEST__) return app
 
   let port = config.server.port
   if (instance) port += +instance

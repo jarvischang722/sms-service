@@ -31,7 +31,7 @@ module.exports = (signKey, data) => {
   keyArr.sort()
   let str = ''
   for (const key of keyArr) {
-    if (!data.hasOwnProperty(key)) continue
+    if (!data[key]) continue
     str += data[key]
   }
   str += signKey

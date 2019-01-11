@@ -1,4 +1,4 @@
-import errors from './index'
+const errors = require('./index')
 
 const ERRORS = {
   InvalidSignature: { restCode: 1, message: 'Invalid Signature', statusCode: 403 },

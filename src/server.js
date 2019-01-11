@@ -3,6 +3,7 @@ const openService = require('./services/open')
 const db = require('./db')
 // const log = require('./logger')
 // const errors = require('./error')
+require('./error/register-errors')
 
 global.db = db
 

@@ -12,7 +12,7 @@ const authorize = () => {
         SELECT
           id,
           code,
-          sign_key,
+          sign_key
         FROM merchant
         WHERE
           code = ?
