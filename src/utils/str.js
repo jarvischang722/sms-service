@@ -1,8 +1,18 @@
 const uuidV4 = require('uuid/v4')
 
-const random = (len = 8) => {
+/**
+ * 生成亂數
+ * @param {Number} len : 亂數長度
+ * @param {String} type : 亂數種類 ('letter' | 'number' , Default: letter + number)
+ */
+const random = (len = 8, type) => {
   let text = ''
-  const raw = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  let raw = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  if (type === 'letter') {
+    raw = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+  } else if (type === 'number') {
+    raw = '0123456789'
+  }
 
   for (const i of Array.from(Array(len).keys())) {
     text += raw.charAt(Math.floor(Math.random() * raw.length))
@@ -20,7 +30,7 @@ const pad = (number, max) => {
   return tmp.substr(1)
 }
 
-module.export = {
+module.exports = {
   random,
   generateKey,
   pad

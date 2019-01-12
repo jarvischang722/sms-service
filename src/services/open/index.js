@@ -46,10 +46,15 @@ const server = async () => {
   app.use('/sms/openapi', apiRouter)
 
   /* eslint-disable no-underscore-dangle */
-  // if (__TEST__) return app
+  global.__DEV__ = process.env.NODE_ENV ? process.env.NODE_ENV === 'dev' : false
+  global.__TEST__ = process.env.NODE_ENV ? process.env.NODE_ENV === 'test' : false
+
+
+  if (__TEST__) return app
 
   let port = config.server.port
   if (instance) port += +instance
+
 
   return app.listen(port, () => {
     console.log(`The server [${config.name}] running on port: ${port}`)

@@ -1,0 +1,6 @@
+// 簡訊內容種類
+exports.SMS_TEXT_TYPE = {
+  VERIFICATION_CODE: 0,
+  NOTIFY_WILL_DRAW: 1,
+  NOTIFY_WINNING: 2
+}

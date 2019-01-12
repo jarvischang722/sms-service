@@ -49,14 +49,16 @@ const send = (cty_cod, mobile, text) =>
       if (data && data.messages.length > 0) {
         const msgInfo = data.messages[0]
         if (msgInfo.status === '0') {
+          console.log(`Sended SMS to [${to}]. message_id: ${msgInfo['message-id']}`)
           resolve()
         } else {
-          reject(new Error(`Sending to [${to}]. , Error code : ${msgInfo.status}, Error message : ${msgInfo['error-text']}`))
+          reject(new Error(`Sending to [${to}]. An error occurred, Error code : ${msgInfo.status}, Error message : ${msgInfo['error-text']}`))
         }
       }
     })
   })
 
 module.exports = {
-  send
+  send,
+  format
 }

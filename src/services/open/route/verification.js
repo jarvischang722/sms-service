@@ -1,4 +1,5 @@
 const { validate, getSchema, T } = require('../../../validator')
+const Verification = require('../../../schema/open/verification')
 
 const SCHEMA = {
   merchant_code: T.string().regex(/^[a-zA-Z0-9_]+$/).min(6).max(50)
@@ -11,15 +12,13 @@ const SCHEMA = {
 }
 
 module.exports = (route) => {
-  const sendVerificationCode = async (req, res, next) => {
+  const sendVerificationCode = async (req, res) => {
     try {
       validate(req.body, getSchema(SCHEMA, 'merchant_code', 'country_code', 'mobile', 'locale', 'sign'))
-      return res.json({
-        success: true,
-        code: 0
-      })
+      await Verification.sendVerifyCode(req.body)
+      res.json({ success: true, code: 0 })
     } catch (err) {
-      return next(err)
+      res.json({ success: false, code: 0, message: err.message })
     }
   }
 
