@@ -1,18 +1,19 @@
 const StrUtil = require('../../utils/str')
 const errors = require('../../error')
-
+const SMS = require('../../sms')
 /**
  * 取得玩家的LuckyDraw
- * @param {String} merchant_code
- * @param {String} mobile
+ * @param {Object} queryData
  */
-const getPlayerLuckyDraw = async (merchant_code, mobile) => {
+const getPlayerLuckyDraw = async (queryData) => {
+  const { merchant_code, country_code, mobile } = queryData
+  const phoneNum = SMS.format(country_code, mobile)
   const querySQL = `
     SELECT lucky_draw
     FROM player
     WHERE merchant_code = ? and mobile
   ;`
-  const result = await db.query(querySQL, [merchant_code, mobile])
+  const result = await db.query(querySQL, [merchant_code, phoneNum])
   if (result.length === 0) {
     return ''
   }
@@ -52,8 +53,23 @@ const genDrawNum = async (merchant_code, phoneNum, name) => {
   return luckyDraw
 }
 
-const checkIsWinning = () => {
-  // 查詢是否中獎 by mobile
+/**
+ * 確認此玩家有沒有中獎
+ */
+const checkIsWinning = async (queryData) => {
+  const { merchant_code, country_code, mobile } = queryData
+  const phoneNum = SMS.format(country_code, mobile)
+  let isWinning = false
+  const querySQL = `
+      SELECT count(winner_mobile) as cnt
+      FROM winning
+      WHERE merchant_code = ? and winner_mobile = ?
+  ;`
+  const result = await db.query(querySQL, [merchant_code, phoneNum])
+  if (result[0].cnt > 0) {
+    isWinning = true
+  }
+  return isWinning
 }
 
 const notifyWillDrawLottery = () => {

@@ -13,9 +13,8 @@ const SCHEMA = {
 module.exports = (route) => {
   const queryLuckyDraw = async (req, res, next) => {
     try {
-      const queryData = validate(req.query, getSchema(SCHEMA, 'merchant_code', 'country_code', 'mobile', 'sign'))
-      const { merchant_code, mobile } = queryData
-      const lucky_draw = await Draw.getPlayerLuckyDraw(merchant_code, mobile)
+      validate(req.query, getSchema(SCHEMA, 'merchant_code', 'country_code', 'mobile', 'sign'))
+      const lucky_draw = await Draw.getPlayerLuckyDraw(req.query)
       return res.json({
         success: true,
         code: 0,
@@ -31,9 +30,13 @@ module.exports = (route) => {
   const queryIsWinning = async (req, res, next) => {
     try {
       validate(req.query, getSchema(SCHEMA, 'merchant_code', 'country_code', 'mobile', 'lucky_draw', 'sign'))
+      const isWinning = await Draw.checkIsWinning(req.query)
       return res.json({
         success: true,
-        code: 0
+        code: 0,
+        detail: {
+          isWinning
+        }
       })
     } catch (err) {
       return next(err)
