@@ -7,4 +7,4 @@ CREATE TABLE player (
   lucky_draw VARCHAR(8),
   created timestamp DEFAULT CURRENT_TIMESTAMP,
   last_updated timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  UNIQUE KEY `mobile_UNIQUE` (`merchant_code`,`mobile`));
+  UNIQUE KEY `merch_mobile_UNIQUE` (`merchant_code`,`mobile`));

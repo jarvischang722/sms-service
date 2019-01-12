@@ -2,6 +2,24 @@ const StrUtil = require('../../utils/str')
 const errors = require('../../error')
 
 /**
+ * 取得玩家的LuckyDraw
+ * @param {String} merchant_code
+ * @param {String} mobile
+ */
+const getPlayerLuckyDraw = async (merchant_code, mobile) => {
+  const querySQL = `
+    SELECT lucky_draw
+    FROM player
+    WHERE merchant_code = ? and mobile
+  ;`
+  const result = await db.query(querySQL, [merchant_code, mobile])
+  if (result.length === 0) {
+    return ''
+  }
+  return result[0].lucky_draw
+}
+
+/**
  * 生成玩家的開獎號碼(luckyDraw)
  * 1. 如果此玩家有開獎號碼，則回傳舊的luckyDraw
  * 2. 產生luckyDraw時要避免產生相同的luckyDraw
@@ -14,9 +32,6 @@ const genDrawNum = async (merchant_code, phoneNum, name) => {
   `
   const results = await db.query(querySQL, [merchant_code])
   const allDrawNum = results.map(m => m.lucky_draw) // 存放此merchant下所有玩家的開獎號碼
-
-  const match = results.filter(m => m.mobile === phoneNum)
-  if (match.length > 0) return match[0].lucky_draw
 
   let luckyDraw = StrUtil.random(8, 'letter')
   let isNotDup = false
@@ -48,6 +63,7 @@ const notifyWillDrawLottery = () => {
 
 module.exports = {
   genDrawNum,
+  getPlayerLuckyDraw,
   checkIsWinning,
   notifyWillDrawLottery
 }

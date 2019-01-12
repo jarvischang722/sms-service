@@ -58,7 +58,11 @@ const checkVerifyCode = async (postData) => {
   `
   const result = await db.query(querySQL, [phoneNum, verification_code])
   if (result[0].cnt > 0) {
-    luckyDraw = await Draw.genDrawNum(merchant_code, phoneNum)
+    // TODO 刪除掉此筆驗證碼
+    luckyDraw = await Draw.getPlayerLuckyDraw(merchant_code, phoneNum)
+    if (luckyDraw === '') {
+      luckyDraw = await Draw.genDrawNum(merchant_code, phoneNum)
+    }
   }
   return luckyDraw
 }
