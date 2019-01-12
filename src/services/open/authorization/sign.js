@@ -35,7 +35,6 @@ module.exports = (signKey, data) => {
     str += data[key]
   }
   str += signKey
-  // 886 dd35aPO0bd186dc6ace6We2e0fb48s70 0938891988164068dd35aPO0bd186dc6ace6We2e0fb48s70
   const hash = crypto.createHash('sha1')
   hash.update(str)
   return hash.digest('hex')

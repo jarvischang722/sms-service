@@ -1,6 +1,5 @@
 const openService = require('./services/open')
 const Cron = require('./cron')
-// const backofficeService = require('./services/backoffice')
 const db = require('./db')
 // const log = require('./logger')
 // const errors = require('./error')
