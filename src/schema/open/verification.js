@@ -3,7 +3,7 @@ const StrUtil = require('../../utils/str')
 const SMS = require('../../sms')
 const SmsText = require('../backoffice/sms_text')
 const errors = require('../../error')
-
+const Draw = require('./draw')
 /**
  * 更新手機號碼對應的驗證碼到資料庫
  * @param {String} randomCode
@@ -47,8 +47,20 @@ const sendVerifyCode = async postData => {
   SMS.send(country_code, mobile, smsText)
 }
 
-const checkVerifyCode = () => {
-  // 驗證手機號是否正確
+const checkVerifyCode = async (postData) => {
+  const { country_code, mobile, verification_code, merchant_code } = postData
+  const phoneNum = SMS.format(country_code, mobile)
+  let luckyDraw = ''
+  const querySQL = `
+     SELECT count(mobile) as cnt
+     FROM verification_code_mapping
+     WHERE mobile = ? and verification_code = ? 
+  `
+  const result = await db.query(querySQL, [phoneNum, verification_code])
+  if (result[0].cnt > 0) {
+    luckyDraw = await Draw.genDrawNum(merchant_code, phoneNum)
+  }
+  return luckyDraw
 }
 
 module.exports = {

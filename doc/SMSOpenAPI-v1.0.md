@@ -4,7 +4,7 @@
 
 ## <img src="C:\Users\Jun\Documents\API\SMS\icons\scroll.svg" width="50px" />Changes
 
-| Date |   Content                                                     |  By      | Version|
+| Date |   Content    |  By      | Version|
 |------|--------------------|-------|-------|
 |2019-01-09| Init version| Jun Chang| v1.0|
 || | | |
@@ -186,7 +186,8 @@ code:
 
 
 detail :
-|    Name    |       Type        |                 Description                  |
+
+|    Name    |   Type   |  Description   |
 |-------|------|-------|
 | || |
 
