@@ -1,9 +1,10 @@
-const { SMS_TEXT_TYPE } = require('../../metadata/const')
+const { SMS_TEXT_TYPE, VERIFICATION } = require('../../metadata/const')
 const StrUtil = require('../../utils/str')
 const SMS = require('../../sms')
 const SmsText = require('../backoffice/sms_text')
 const errors = require('../../error')
 const Draw = require('./draw')
+const moment = require('moment')
 /**
  * 更新手機號碼對應的驗證碼到資料庫
  * @param {String} randomCode
@@ -42,7 +43,10 @@ const sendVerifyCode = async postData => {
     smsText = smsText.replace(/###verification_code###/g, randomCode)
   }
 
-  if (__DEV__ || __TEST__) return
+  if (__DEV__ || __TEST__) {
+    console.warn('DEV or TEST env doesn\'t trigger SMS sending')
+    return
+  }
 
   SMS.send(country_code, mobile, smsText)
 }
@@ -50,20 +54,27 @@ const sendVerifyCode = async postData => {
 const checkVerifyCode = async (postData) => {
   const { country_code, mobile, verification_code, merchant_code } = postData
   const phoneNum = SMS.format(country_code, mobile)
-  let luckyDraw = ''
+  let luckyDraw
   const querySQL = `
-     SELECT count(mobile) as cnt
+     SELECT mobile, last_updated
      FROM verification_code_mapping
      WHERE mobile = ? and verification_code = ? 
   `
   const result = await db.query(querySQL, [phoneNum, verification_code])
-  if (result[0].cnt > 0) {
-    // TODO 刪除掉此筆驗證碼
-    luckyDraw = await Draw.getPlayerLuckyDraw(merchant_code, phoneNum)
-    if (luckyDraw === '') {
-      luckyDraw = await Draw.genDrawNum(merchant_code, phoneNum)
-    }
+
+  if (result.length === 0) throw new errors.InvalidVerificationCodeError()
+
+  const verifyCodeCreateTime = result[0].last_updated
+  const overMins = moment().diff(verifyCodeCreateTime, 'minutes')
+
+  if (overMins > VERIFICATION.OVER_MINUTS_TIME) throw new errors.VerificationCodeOvertimeError()
+
+  // TODO 刪除掉此筆驗證碼
+  luckyDraw = await Draw.getPlayerLuckyDraw(postData)
+  if (luckyDraw === null) {
+    luckyDraw = await Draw.genDrawNum(merchant_code, phoneNum)
   }
+
   return luckyDraw
 }
 

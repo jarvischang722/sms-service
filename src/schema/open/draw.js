@@ -15,7 +15,7 @@ const getPlayerLuckyDraw = async (queryData) => {
   ;`
   const result = await db.query(querySQL, [merchant_code, phoneNum])
   if (result.length === 0) {
-    return ''
+    return null
   }
   return result[0].lucky_draw
 }
