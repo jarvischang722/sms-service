@@ -56,7 +56,7 @@ const checkVerifyCode = async (postData) => {
   const phoneNum = SMS.format(country_code, mobile)
   let luckyDraw
   const querySQL = `
-     SELECT mobile, last_updated
+     SELECT mobile, created
      FROM verification_code_mapping
      WHERE mobile = ? and verification_code = ? 
   `
@@ -64,12 +64,19 @@ const checkVerifyCode = async (postData) => {
 
   if (result.length === 0) throw new errors.InvalidVerificationCodeError()
 
-  const verifyCodeCreateTime = result[0].last_updated
-  const overMins = moment().diff(verifyCodeCreateTime, 'minutes')
+  const createTime = result[0].created
+  const overMins = moment().diff(createTime, 'minutes')
 
   if (overMins > VERIFICATION.OVER_MINUTS_TIME) throw new errors.VerificationCodeOvertimeError()
 
-  // TODO 刪除掉此筆驗證碼
+  // 刪除過期或是驗證過的驗證碼
+  const delSQL = `
+     DELETE FROM verification_code_mapping 
+     WHERE mobile = ? or created < ?;
+  ;`
+  const invaidDateTime = moment().subtract(VERIFICATION.OVER_MINUTS_TIME, 'minutes').format('YYYY-MM-DD HH:mm')
+  await db.query(delSQL, [phoneNum, invaidDateTime])
+
   luckyDraw = await Draw.getPlayerLuckyDraw(postData)
   if (luckyDraw === null) {
     luckyDraw = await Draw.genDrawNum(merchant_code, phoneNum)
