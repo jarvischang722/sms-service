@@ -23,7 +23,9 @@ const authorize = () => {
 
       // check signature
       const signature = authSign(row.sign_key, data)
-      console.log(signature)
+
+      if (__DEV__) console.log(signature)
+
       if (!signature || !sign || signature !== sign) return next(new errors.InvalidSignatureError())
       req.merchant = {
         id: row.id,

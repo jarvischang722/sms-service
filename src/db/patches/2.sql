@@ -7,3 +7,8 @@ CREATE TABLE merchant (
   created timestamp DEFAULT CURRENT_TIMESTAMP,
   last_updated timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   UNIQUE INDEX code_UNIQUE (code ASC));
+
+
+
+  INSERT INTO `merchant` (`name`, `code`, `sign_key`)
+  VALUES ('tripleonetech','tripleonetech', 'd8295889bc23439a9605dbc78a47fb1c');
