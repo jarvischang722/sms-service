@@ -1,8 +1,8 @@
 {
   "apps": [
     {
-      "name": "lottery-service",
-      "script": "index.js",
+      "name": "sms-service",
+      "script": "./src/index.js",
       "ignore_watch": ["log", "pid", "public"],
       "instances": 1,
       "exec_mode": "cluster_mode",
