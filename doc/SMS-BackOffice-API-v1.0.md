@@ -1,4 +1,4 @@
-# SMS Open API 接入文檔 v1.0
+# SMS BackOffice API 接入文檔 v1.0
 
 
 
@@ -6,7 +6,7 @@
 
 | Date |   Content    |  By      | Version|
 |------|--------------------|-------|-------|
-|2019-01-14| Init version| Jun Chang| v1.0|
+|2019-01-15| Init version| Jun Chang| v1.0|
 || | | |
 || | | |
 || | | |
@@ -46,7 +46,7 @@ Host		   : **[api server]**
 ```json
 {
     "username": "admin",
-    "password": "admin"
+    "password": "pass1234"
 }
 ```
 
@@ -72,15 +72,15 @@ Host		   : **[api server]**
 
 <div style="page-break-after: always;"></div> 
 
+
+
 ## <img src="C:\Users\Jun\Documents\API\SMS\icons\error.svg" width="50px" />Error Code 错误代码
 
 | Code |                             Type                             | Description | Http status code |
 | :--: | :----------------------------------------------------------: | :---------: | :--------------: |
 |  0   |                         success                         | 成功 |       200        |
 
-<div style="page-break-after: always;"></div> 
 
-## <img src="C:\Users\Jun\Documents\API\SMS\icons\shield.svg" width="50px" />Security Mode 安全模式
 
 
 
@@ -90,7 +90,11 @@ Host		   : **[api server]**
 
 
 
-### Login 登陸
+### User
+
+
+
+#### Login 登陸
 
 
 Uri 		        :  **login**
@@ -138,10 +142,14 @@ detail :
 
 
 
-### Random draw lottery 人工随机开奖
+### Draw 
 
 
-Uri 		:  **random_draw_lottery**
+
+#### Draw lottery 开奖
+
+
+Uri 		:  **/draw/lottery**
 
 Method  	:  **post**
 
@@ -149,7 +157,7 @@ Parameters :
 
 |     Name      |                         Type                          |                         Description                          |
 | :-----------: | :---------------------------------------------------: | :----------------------------------------------------------: |
-| |  |          |
+| lucky_draw | string: only 8 letter | 開獎號碼 |
 
 
 
@@ -166,6 +174,7 @@ Response :
 ```
 
 
+
 code:
 
 | Code |  Description |
@@ -183,18 +192,20 @@ detail :
 
 
 
-### Assign draw lottery 人工指定号码开奖
 
 
-Uri 		:  **assign_draw_lottery**
+#### Check If Today Won The Draw 查詢今日是否开过奖
 
-Method  	:  **post**
+
+Uri 		:  **/draw/is_draw_today**
+
+Method  	:  **get**
 
 Parameters :
 
 |     Name      |                         Type                          |                         Description                          |
 | :-----------: | :---------------------------------------------------: | :----------------------------------------------------------: |
-| lucky_draw |  string |          |
+|  |   |          |
 
 
 
@@ -205,7 +216,9 @@ Response :
   "succuss": true,
   "code": 0,
   "detail": { 
-     period: xxxx
+     today: '2019/01/30'
+     is_draw: true,
+     lucky_draw : 'xDrfSgag'
   }
 }
 ```
@@ -225,22 +238,27 @@ detail :
 
 |    Name    |   Type   |  Description   |
 |-------|------|-------|
-| period | string| 期號 |
+| today | string | 今天日期 |
+| is_draw | boolean | 今天是否開過獎 |
+| lucky_draw | string| 開獎號碼 |
 
 
 
-### 开奖历史
+#### Draw History 开奖历史
 
 
-Uri 		:  **draw_history**
+Uri 		:  **/draw/history**
 
 Method  	:  **get**
 
 Parameters :
 
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-|      |      |             |
+| Name      | Type   | Description                              |
+| --------- | ------ | ---------------------------------------- |
+| page      | number | `Optional`  页码                         |
+| pagesize  | number | `Optional`  每页数量                     |
+| draw_sta  | string | `Optional`  中獎狀態                     |
+| draw_date | string | `Optional `  中獎日期 format: YYYY/MM/DD |
 
 
 
@@ -257,6 +275,8 @@ Response :
 }
 ```
 
+
+
 code:
 
 | Code |  Description |
@@ -272,21 +292,87 @@ detail :
 | list | array| |
 
 
+
 list :
 
 |    Name    |   Type   |  Description   |
 |-------|------|-------|
-| period | string| 期號 |
-| draw_date | string | 开奖日期 |
+| draw_datetime | string | 开奖日期時間 |
 | lucky_draw | string | 中奖号码 |
 | winner_mobile | string | 中奖人手機號 |
 
 
 
-### 獲取白名單列表
+#### Get All Mobile and Lucky Draw 取得開獎號與对应的手机号列表*
+
+*取得今天分发出去的开奖号码和对应的手机号列表*
 
 
-Uri 		:  **white_list**
+
+Uri 		:  **/draw/all_mobile_draw**
+
+Method  	:  **get**
+
+Parameters :
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+|      |      |             |
+
+
+
+Response :
+
+```json
+{
+  "succuss": true,
+  "code": 0,
+  "detail": { 
+     lucky_draw: 'xxxxxxxx' 
+     list: []
+  }
+}
+```
+
+
+
+code:
+
+| Code | Description |
+| :--: | :---------: |
+|  0   |   success   |
+
+
+
+detail :
+
+| Name | Type  | Description |
+| ---- | ----- | ----------- |
+| list | array |             |
+
+
+
+list :
+
+| Name          | Type   | Description      |
+| ------------- | ------ | ---------------- |
+| lucky_draw    | string | 今日發出的開獎號 |
+| winner_mobile | string | 玩家手機號       |
+
+
+
+
+
+
+
+### White List
+
+
+
+#### Get White List  獲取白名單列表
+
+
+Uri 		:  **/white_list/list**
 
 Method  	:  **get**
 
@@ -296,9 +382,8 @@ Parameters :
 
 |     Name      |                         Type                          |                         Description                          |
 | :-----------: | :---------------------------------------------------: | :----------------------------------------------------------: |
-||||
-
-
+| page      | number | `Optional`页码                        |
+| pagesize  | number | `Optional`每页数量                    |
 
 
 
@@ -337,7 +422,8 @@ list :
 | ips | string| |
 
 
-### 新增白名單
+
+#### Add White List  新增白名單
 
 
 Uri 		:  **add_white_list**
@@ -367,7 +453,10 @@ code:
 |  0   |  success |
 
 
-### 更新白名單
+
+
+
+#### Update White List  更新白名單
 
 
 Uri 		:  **update_white_list**
@@ -400,19 +489,60 @@ code:
 
 
 
+#### Delete White List  刪除白名單
 
-### 獲取簡訊內容清單
 
 
-Uri 	   :  **sms_text**
+Uri 		:  **/white_list/delete**
+
+Method  	:  **post**
+
+Parameters :
+
+| Name |  Type  | Description |
+| :--: | :----: | :---------: |
+|  id  | number |             |
+| ips  | string |             |
+
+
+
+Response :
+
+```json
+{
+  "succuss": true,
+  "code": 0
+}
+```
+
+
+
+code:
+
+| Code | Description |
+| :--: | :---------: |
+|  0   |   success   |
+
+
+
+### SMS
+
+
+#### Get SMS List  獲取簡訊內容清單
+
+
+Uri 	   :  **/sms/list**
 
 Method  	:  **get**
 
 Parameters :
 
+
+
 |     Name      |                         Type                          |                         Description                          |
-||||
-||
+|---|---|---|
+| page      | number | `Optional`页码                        |
+| pagesize  | number | `Optional`每页数量                    |
 
 
 
@@ -425,16 +555,19 @@ Response :
   "succuss": true,
   "code": 0,
   "detail: {
-  		list: 
+  	 list: []
   }
 }
 ```
+
+
 
 detail :
 
 |    Name    |   Type   |  Description   |
 |-------|------|-------|
 | list | array |   |
+
 
 
 list :
@@ -445,6 +578,7 @@ list :
 | sms_text | string |   |
 
 
+
 code:
 
 | Code |  Description |
@@ -453,10 +587,10 @@ code:
 
 
 
-### 新增簡訊發送文字
+#### Add SMS Text  新增簡訊發送文字
 
 
-Uri 	   :  **add_sms_text**
+Uri 	   :  **/sms/add**
 
 Method  	:  **post**
 
@@ -464,9 +598,11 @@ Parameters :
 
 |     Name      |                         Type                          |                         Description                          |
 | :-----------: | :---------------------------------------------------: | :----------------------------------------------------------: |
-| sms_type |  string |     簡訊種類   |
+| sms_type |  string | 簡訊種類<br /> **VERIFICATION_CODE** : 驗證碼內容<br /> **NOTIFY_WILL_DRAW** : 通知即將開獎內容<br /> **NOTIFY_WINNING** : 通知中獎內容 |
 | sms_text |  string |     簡訊內容     |
 | send_date |  string |    `optinal` 指定發送日期     |
+
+
 
 Response :
 
@@ -477,6 +613,8 @@ Response :
 }
 ```
 
+
+
 code:
 
 | Code |  Description |
@@ -485,10 +623,10 @@ code:
 
 
 
-### 更新簡訊發送文字
+#### Update SMS Text 更新簡訊發送文字
 
 
-Uri 	   :  **update_sms_text**
+Uri 	   :  **/sms/update**
 
 Method  	:  **post**
 
@@ -518,4 +656,35 @@ code:
 |  0   |  success |
 
 
+
+
+
+#### Delete SMS Text 刪除簡訊發送文字
+
+Uri 	   :  **/sms/delete**
+
+Method  	:  **post**
+
+Parameters :
+
+| Name |  Type  | Description |
+| :--: | :----: | :---------: |
+|  id  | string |  簡訊編號   |
+
+Response :
+
+```json
+{
+  "succuss": true,
+  "code": 0
+}
+```
+
+
+
+code:
+
+| Code | Description |
+| :--: | :---------: |
+|  0   |   success   |
 
