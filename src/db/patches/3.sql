@@ -4,4 +4,5 @@ CREATE TABLE verification_code_mapping (
   mobile VARCHAR(50) NOT NULL,
   verification_code VARCHAR(100) NOT NULL,
   created timestamp DEFAULT CURRENT_TIMESTAMP,
+  last_updated timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   UNIQUE INDEX mobile_UNIQUE (mobile ASC));

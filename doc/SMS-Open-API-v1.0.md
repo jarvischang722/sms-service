@@ -4,7 +4,7 @@
 
 ## <img src="C:\Users\Jun\Documents\API\SMS\icons\scroll.svg" width="50px" />Changes
 
-| Date |   Content    |  By      | Version|
+| Date |   Content                                                     |  By      | Version|
 |------|--------------------|-------|-------|
 |2019-01-09| Init version| Jun Chang| v1.0|
 || | | |
@@ -52,8 +52,9 @@ Content-Length : **255**
 
 ```json
 {
-    "merchant_code": "xxxxxxx",
-    "mobile": "886938891988",
+    "merchant_code": "tr",
+    "country_code": "886",
+    "mobile": "0912345678",
     "sign": "dca7015a53378db1d08a4c8d7d91584b637bf5c9"
 }
 ```
@@ -106,7 +107,7 @@ Content-Length : **255**
 
 + **Merchant Code and Secure Key 商户号和安全秘钥 商户号和安全秘钥 **
 
-*Any 32 chars(letter and number)*
+*Any 6~32 chars(letter and number)*
 *Will send by email*
 *Testing key: dd35aPO0bd186dc6ace6We2e0fb48s70*
 
@@ -137,7 +138,7 @@ Content-Length : **255**
 
 ####  <img src="C:\Users\Jun\Documents\API\SMS\icons\plug.svg" width="36px" /> Send Verification Code  寄送驗證碼
 
-寄送驗證碼到玩家手機，讓玩家收到驗證碼
+*寄送驗證碼到玩家手機，讓玩家收到驗證碼*
 
 *Send verification code to player's phone.*
 
@@ -186,8 +187,7 @@ code:
 
 
 detail :
-
-|    Name    |   Type   |  Description   |
+|    Name    |       Type        |                 Description                  |
 |-------|------|-------|
 | || |
 
