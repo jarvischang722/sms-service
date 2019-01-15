@@ -369,3 +369,57 @@ detail :
 
 
 
+
+
+
+#### Send Group SMS 寄送群體簡訊
+
+
+
+Uri 		        :  **send_group_sms**
+
+Method  	:  **post**
+
+Parameters :
+
+|     Name      |                         Type                          |                   Description                    |
+| :-----------: | :---------------------------------------------------: | :----------------------------------------------: |
+| merchant_code | string: only letter and number and "_"   , size: 6-50 |              商户号  merchant code               |
+|    mobile_list     |       array                         |        群體手机号<br />Multiple phone number <br>       **Note:** : with country code   |
+|  content   |                        string                         |         簡訊內容<br />SMS content         |
+|     sign      |                        string                         |                    signature                     |
+
+
+Response :
+
+```json
+{
+  "succuss": true,
+  "code": 0,
+  "detail": { 
+  	 "sent_mobile_list": [
+          "886938123456","886938654321"
+     ]
+  }
+}
+```
+
+
+
+code:
+
+| Code |  Description |
+| :--: |  :---------: |
+|  0   |  success |
+|  1   |  invalid signature 非法签名 |
+|  2   |  invalid merchant_code 非法商户号 |
+
+
+
+detail :
+
+|    Name    |       Type        |                 Description                  |
+|-------|------|-------|
+| sent_mobile_list |Array| Successfully sent phone number<br />已成功寄送出的手機號碼清單 |
+
+

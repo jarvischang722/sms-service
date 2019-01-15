@@ -37,18 +37,14 @@ const genVerifyCode = async (country_code, mobile) => {
  */
 const sendVerifyCode = async postData => {
   const { country_code, mobile } = postData
+  const phoneNum = SMS.format(country_code, mobile)
   const randomCode = await genVerifyCode(country_code, mobile)
   let smsText = await SmsText.getMsgContent(SMS_TEXT_TYPE.VERIFICATION_CODE)
   if (typeof smsText === 'string') {
     smsText = smsText.replace(/###verification_code###/g, randomCode)
   }
 
-  if (__DEV__ || __TEST__) {
-    console.warn('DEV or TEST env doesn\'t trigger SMS sending')
-    return
-  }
-
-  SMS.send(country_code, mobile, smsText)
+  await SMS.send(phoneNum, smsText)
 }
 
 const checkVerifyCode = async (postData) => {

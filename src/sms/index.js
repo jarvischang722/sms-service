@@ -19,16 +19,19 @@ const format = (cty_cod, mobile) => {
 
 /**
  * 寄送简讯
- * @param {String} cty_cod  国际码
- * @param {String} mobile 手机号码
+ * @param {String} phoneNum  手机号码(已加國際碼)
  * @param {String} text 简讯内容
  */
-const send = (cty_cod, mobile, text) =>
+const send = (phoneNum, text) =>
   new Promise((resolve, reject) => {
-    const from = 'Nexmo'
-    const to = format(cty_cod, mobile)
+    const from = 'Tripleonetech'
+    const to = phoneNum
     const opts = {
       type: 'unicode'
+    }
+    if (__TEST__) {
+      console.warn('DEV or TEST env doesn\'t trigger SMS sending')
+      resolve()
     }
     nexmo.message.sendSms(from, to, text, opts, (err, data) => {
       /** *
@@ -50,15 +53,29 @@ const send = (cty_cod, mobile, text) =>
         const msgInfo = data.messages[0]
         if (msgInfo.status === '0') {
           console.log(`Sended SMS to [${to}]. message_id: ${msgInfo['message-id']}`)
-          resolve()
+          resolve(data)
         } else {
-          reject(new Error(`Sending to [${to}]. An error occurred, Error code : ${msgInfo.status}, Error message : ${msgInfo['error-text']}`))
+          console.error(new Error(`Sending to [${to}]. An error occurred, Error code : ${msgInfo.status}, Error message : ${msgInfo['error-text']}`))
+          resolve()
         }
       }
     })
   })
 
+const sendGroup = async (mobile_list, content) => {
+  const result = []
+  for (const mb of mobile_list) {
+    /* eslint-disable no-await-in-loop */
+    const res = await send(mb, content)
+    if (res && res.messages.length > 0) {
+      result.push(res.messages[0].to)
+    }
+  }
+  return result
+}
+
 module.exports = {
   send,
+  sendGroup,
   format
 }
