@@ -4,7 +4,7 @@ const SMS = require('../../../sms')
 const SCHEMA = {
   merchant_code: T.string().regex(/^[a-zA-Z0-9_]+$/).min(6).max(50)
     .required(),
-  mobile_list: T.array().min(1).required(),
+  mobile_list: T.string().regex(/^[0-9,]+$/).required(),
   content: T.string().required(),
   sign: T.string().required(),
 }

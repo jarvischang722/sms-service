@@ -410,7 +410,7 @@ Parameters :
 |     Name      |                         Type                          |                   Description                    |
 | :-----------: | :---------------------------------------------------: | :----------------------------------------------: |
 | merchant_code | string: only letter and number and "_"   , size: 6-50 |              商户号  merchant code               |
-|    mobile_list     |       array                         |        群體手机号<br />Multiple phone number <br>       **Note:** : with country code   |
+|    mobile_list     |       string                         |        群體手机号<br />Multiple phone number <br>       **Note:** : <br>1.  with country code  <br> 2. Separate phone number with a comma |
 |  content   |                        string                         |         簡訊內容<br />SMS content         |
 |     sign      |                        string                         |                    signature                     |
 

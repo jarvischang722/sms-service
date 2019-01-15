@@ -69,12 +69,13 @@ const send = (phoneNum, text) =>
 
 /**
  * 群發簡訊
- * @param {Array} mobile_list
+ * @param {String} mobile_list
  * @param {String} content
  */
 const sendGroup = async (mobile_list, content) => {
   const res = []
-  for (const mb of mobile_list) {
+  const phoneArr = typeof mobile_list === 'string' ? mobile_list.split(',') : ''
+  for (const mb of phoneArr) {
     /* eslint-disable no-await-in-loop */
     const msgInfo = await send(mb, content)
     if (msgInfo.status === '0') res.push(msgInfo.to)
