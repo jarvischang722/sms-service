@@ -34,7 +34,7 @@ Uri prefix uri  : **/sms/openapi**
 
 Method		   : **POST**
 
-URI			   :  **/sms/openapi/send_verification_code** 
+URI			   :  **/sms/openapi/send\_verification\_code** 
 
 Content-Type   :  **application/json; charset=utf-8**
 
@@ -148,7 +148,7 @@ Content-Length : **255**
 
 
 
-Uri 		        :  **send_verification_code **
+Uri 		        :  **send\_verification\_code**
 
 Method  	:  **post**
 
@@ -201,7 +201,7 @@ detail :
 
 
 
-Uri 		 	:  **check_verification_code **
+Uri 		 	:  **check\_verification\_code**
 
 
 Method  	:  **post**
@@ -261,7 +261,7 @@ detail :
 
 
 
-Uri 			:  **query_lucky_draw**
+Uri 			:  **query\_lucky\_draw**
 
 
 Method  	:  **get**
@@ -321,7 +321,7 @@ detail :
 
 
 
-Uri 		        :  **query_is_winning **
+Uri 		        :  **query\_is\_winning**
 
 Method  	:  **get**
 
@@ -376,7 +376,7 @@ detail :
 
 
 
-Uri 		        :  **send_group_sms**
+Uri 		        :  **send\_group\_sms**
 
 Method  	:  **post**
 

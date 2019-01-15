@@ -30,7 +30,7 @@ const send = (phoneNum, text) =>
       type: 'unicode'
     }
     if (__TEST__) {
-      console.warn('DEV or TEST env doesn\'t trigger SMS sending')
+      console.warn("DEV or TEST env doesn't trigger SMS sending")
       resolve()
     }
     nexmo.message.sendSms(from, to, text, opts, (err, data) => {
@@ -53,25 +53,33 @@ const send = (phoneNum, text) =>
         const msgInfo = data.messages[0]
         if (msgInfo.status === '0') {
           console.log(`Sended SMS to [${to}]. message_id: ${msgInfo['message-id']}`)
-          resolve(data)
         } else {
-          console.error(new Error(`Sending to [${to}]. An error occurred, Error code : ${msgInfo.status}, Error message : ${msgInfo['error-text']}`))
-          resolve()
+          console.error(
+            new Error(
+              `Sending to [${to}]. An error occurred, Error code : ${
+                msgInfo.status
+              }, Error message : ${msgInfo['error-text']}`
+            )
+          )
         }
+        resolve(msgInfo)
       }
     })
   })
 
+/**
+ * 群發簡訊
+ * @param {Array} mobile_list
+ * @param {String} content
+ */
 const sendGroup = async (mobile_list, content) => {
-  const result = []
+  const res = []
   for (const mb of mobile_list) {
     /* eslint-disable no-await-in-loop */
-    const res = await send(mb, content)
-    if (res && res.messages.length > 0) {
-      result.push(res.messages[0].to)
-    }
+    const msgInfo = await send(mb, content)
+    if (msgInfo.status === '0') res.push(msgInfo.to)
   }
-  return result
+  return res
 }
 
 module.exports = {
