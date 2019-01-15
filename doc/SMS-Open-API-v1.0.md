@@ -6,8 +6,8 @@
 
 | Date |   Content                                                     |  By      | Version|
 |------|--------------------|-------|-------|
-|2019-01-09| Init version| Jun Chang| v1.0|
-|| | | |
+|2019-01-15| Add api send\_group\_sms <br> Add example for sign generation | Jun Chang | v1.0.1 |
+|2019-01-09| Init version| Jun Chang| v1.0.0|
 || | | |
 || | | |
 || | | |
@@ -52,7 +52,7 @@ Content-Length : **255**
 
 ```json
 {
-    "merchant_code": "tr",
+    "merchant_code": "tripleonetech",
     "country_code": "886",
     "mobile": "0912345678",
     "sign": "dca7015a53378db1d08a4c8d7d91584b637bf5c9"
@@ -105,7 +105,7 @@ Content-Length : **255**
 
 
 
-+ **Merchant Code and Secure Key 商户号和安全秘钥 商户号和安全秘钥 **
++ **Merchant Code and Secure Key 商户号和安全秘钥 商户号和安全秘钥**
 
 *Any 6~32 chars(letter and number)*
 *Will send by email*
@@ -130,11 +130,42 @@ Content-Length : **255**
 *Ignore any json type field and sign field 忽略所有 忽略所有 json类型字段和 sign字段*
 *Always use utf-8 所有参数默认编码 所有参数默认编码 utf-8*
 
+ example:
+
+>sign_key : 'd8295889bc23439a9605dbc78a47fb1c'
+
+>parameter : {
+	merchant_code:'tripleonetech',
+	country_code:'886', 
+	mobile : '09123456789'
+}
+
+1. The order should be sorted by parameter key in alphabetical order
+
+	**c**ountry_code ,  **m**erchant_code,  **m**obile
+
+2. concat all values
+
+ **886tripleonetech09123456789**
+ 
+3. Add sign_key at the end of the string
+
+	886tripleonetech09123456789**d8295889bc23439a9605dbc78a47fb1c**
+
+4. use SHA1 to get signature
+
+sign_key = sha1(**886tripleonetech09123456789d8295889bc23439a9605dbc78a47fb1c**)
+
+finally get the sign [ **cf33449d4ebf4c441d8ebe18fb4d8d51be341216** ]
+
+
 <div style="page-break-after: always;"></div> 
 
 ## API
 
+> Note : 
 
+> 1. Country code reference : [https://countrycode.org](https://countrycode.org)
 
 ####  <img src="C:\Users\Jun\Documents\API\SMS\icons\plug.svg" width="36px" /> Send Verification Code  寄送驗證碼
 
@@ -169,8 +200,7 @@ Response :
 ```json
 {
   "succuss": true,
-  "code": 0,
-  "detail": { }
+  "code": 0
 }
 ```
 
@@ -185,11 +215,6 @@ code:
 |  2   |  invalid merchant_code 非法商户号 |
 
 
-
-detail :
-|    Name    |       Type        |                 Description                  |
-|-------|------|-------|
-| || |
 
 
 
@@ -420,6 +445,6 @@ detail :
 
 |    Name    |       Type        |                 Description                  |
 |-------|------|-------|
-| sent_mobile_list |Array| Successfully sent phone number<br />已成功寄送出的手機號碼清單 |
+| sent\_mobile\_list |Array| Successfully sent phone number<br />已成功寄送出的手機號碼清單 |
 
 
