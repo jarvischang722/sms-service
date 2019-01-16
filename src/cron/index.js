@@ -12,7 +12,7 @@ const open = require('./open')
 └───────────────────────── second (0 - 59)
  */
 const run = () => {
-  open.runNotifyWillDrawSchedule()
+  // open.runNotifyWillDrawSchedule()
 }
 
 module.exports = {

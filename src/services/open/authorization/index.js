@@ -1,5 +1,6 @@
 const authSign = require('./sign')
 const errors = require('../../../error')
+const log = require('../../../logger')
 
 const authorize = () => {
   const auth = async (req, res, next) => {
@@ -24,7 +25,7 @@ const authorize = () => {
       // check signature
       const signature = authSign(row.sign_key, data)
 
-      if (__DEV__) console.log(signature)
+      if (__DEV__) log.debug(signature)
 
       if (!signature || !sign || signature !== sign) return next(new errors.InvalidSignatureError())
       req.merchant = {

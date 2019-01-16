@@ -70,7 +70,7 @@ class DbManager {
         const { version, file, path: loadFilePath } = patch
         newVersion = version
         if (version > this.version) {
-          console.log(`patching: ${version}`)
+          log.info(`patching: ${version}`)
           let query = fs.readFileSync(file, 'utf8')
           if (query.includes('{{csvFile}}')) {
             const loadFile = path.join(loadFilePath, `${version}.csv`)
@@ -83,7 +83,7 @@ class DbManager {
       }
     })
     if (newVersion > 0 && this.version !== newVersion) {
-      console.error(`Update db failed, expected version is ${newVersion}, but got ${this.version}`)
+      log.error(`Update db failed, expected version is ${newVersion}, but got ${this.version}`)
     }
   }
 }

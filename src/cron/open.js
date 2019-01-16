@@ -1,12 +1,12 @@
 const CronJob = require('cron').CronJob
-
+const log = require('../logger')
 
 const runNotifyWillDrawSchedule = () => {
   /* eslint-disable no-new */
   const cronTime = '* 0 12 * * *'
   const onTick = (() => {
     // 寄送抽獎通知
-    console.log(`寄送即將開獎通知 : ${new Date()}`)
+    log.info(`寄送即將開獎通知 : ${new Date()}`)
   })
   const onComplete = null
   const start = true
@@ -14,7 +14,7 @@ const runNotifyWillDrawSchedule = () => {
 
   new CronJob(cronTime, onTick, onComplete, start, timeZone)
 
-  console.log('Start [NotifyWillDraw] schedule')
+  log.info('Start [NotifyWillDraw] schedule')
 }
 
 

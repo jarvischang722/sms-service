@@ -14,7 +14,7 @@ const query = (execQuery, params = []) =>
     .catch(err => {
       if (!err.code) {
         err.data = execQuery
-        console.error(err, false)
+        log.error(err, false)
         delete err.data
       }
       throw err
@@ -31,7 +31,7 @@ const transaction = (actions) =>
     .catch(err => {
       if (!err.code) {
         err.data = actions
-        console.error(err, false)
+        log.error(err, false)
         delete err.data
       }
       throw err

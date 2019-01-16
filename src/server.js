@@ -1,7 +1,11 @@
+/* eslint-disable no-underscore-dangle */
+global.__DEV__ = process.env.NODE_ENV === 'dev'
+global.__TEST__ = process.env.NODE_ENV === 'test'
+
 const openService = require('./services/open')
 const Cron = require('./cron')
 const db = require('./db')
-// const log = require('./logger')
+const log = require('./logger')
 // const errors = require('./error')
 require('./error/register-errors')
 
@@ -14,7 +18,7 @@ const server = async () => {
   ************************ */
   const dbManager = db.configure()
   await dbManager.update()
-  console.log(`db version: ${dbManager.version}`)
+  log.info(`db version: ${dbManager.version}`)
 
   /** ********************
    *  Start Server
@@ -36,7 +40,7 @@ const server = async () => {
 
 module.exports = () => {
   const handleErr = (e) => {
-    console.error(e)
+    log.error(e)
     throw e
   }
   return server().catch(handleErr)

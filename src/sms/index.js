@@ -1,5 +1,6 @@
 const Nexmo = require('nexmo')
 const config = require('./config')
+const log = require('../logger')
 
 const nexmo = new Nexmo({
   apiKey: config.apiKey,
@@ -30,7 +31,7 @@ const send = (phoneNum, text) =>
       type: 'unicode'
     }
     if (__TEST__) {
-      console.warn("DEV or TEST env doesn't trigger SMS sending")
+      log.warn("DEV or TEST env doesn't trigger SMS sending")
       resolve()
     }
     nexmo.message.sendSms(from, to, text, opts, (err, data) => {
@@ -52,9 +53,9 @@ const send = (phoneNum, text) =>
       if (data && data.messages.length > 0) {
         const msgInfo = data.messages[0]
         if (msgInfo.status === '0') {
-          console.log(`Sended SMS to [${to}]. message_id: ${msgInfo['message-id']}`)
+          log.info(`Sended SMS to [${to}]. message_id: ${msgInfo['message-id']}`)
         } else {
-          console.error(
+          log.error(
             new Error(
               `Sending to [${to}]. An error occurred, Error code : ${
                 msgInfo.status

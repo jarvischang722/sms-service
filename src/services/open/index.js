@@ -6,7 +6,7 @@ const config = require('./config')
 const route = require('./route')
 const errors = require('../../error')
 const authorization = require('./authorization')
-// const log = require('../../logger')
+const log = require('../../logger')
 const pjson = require('../../../package.json')
 
 const instance = process.env.NODE_APP_INSTANCE
@@ -43,12 +43,8 @@ const server = async () => {
   app.get('/', (req, res) => {
     res.send(`Tripleonetech SMS open api service ${pjson.version}`)
   })
+
   app.use('/sms/openapi', apiRouter)
-
-  /* eslint-disable no-underscore-dangle */
-  global.__DEV__ = process.env.NODE_ENV ? process.env.NODE_ENV === 'dev' : false
-  global.__TEST__ = process.env.NODE_ENV ? process.env.NODE_ENV === 'test' : false
-
 
   if (__TEST__) return app
 
@@ -57,7 +53,7 @@ const server = async () => {
 
 
   return app.listen(port, () => {
-    console.log(`The server [${config.name}] running on port: ${port}`)
+    log.info(`The server [${config.name}] running on port: ${port}`)
   })
 }
 

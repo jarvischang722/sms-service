@@ -2,7 +2,7 @@ const http = require('http')
 const errors = require('restify-errors')
 const errorsHelper = require('restify-errors/lib/helpers')
 const localization = require('./locale.zh.json')
-
+const log = require('../logger')
 
 function normalize(name) {
   if (!name.endsWith('Error')) {
@@ -24,7 +24,7 @@ errors.register = (options) => {
     const config = options[name]
     const errorName = normalize(name)
     if (errors[errorName]) {
-      console.log(`Duplicated Error: ${name}(${config.statusCode || config})`)
+      log.info(`Duplicated Error: ${name}(${config.statusCode || config})`)
       return // duplicated
     }
     switch (typeof config) {
