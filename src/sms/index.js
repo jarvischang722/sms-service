@@ -1,11 +1,14 @@
 const Nexmo = require('nexmo')
 const config = require('./config')
 const log = require('../logger')
+const errors = require('../error')
+const nexmoErrRef = require('./errors')
 
-const nexmo = new Nexmo({
-  apiKey: config.apiKey,
-  apiSecret: config.apiSecret
-})
+const FROM = 'Tripleonetech'
+const OPTS = {
+  type: 'unicode'
+}
+
 
 /**
  * 检查手机号码格式
@@ -25,16 +28,17 @@ const format = (cty_cod, mobile) => {
  */
 const send = (phoneNum, text) =>
   new Promise((resolve, reject) => {
-    const from = 'Tripleonetech'
+    const nexmo = new Nexmo({
+      apiKey: config.apiKey,
+      apiSecret: config.apiSecret
+    })
     const to = phoneNum
-    const opts = {
-      type: 'unicode'
-    }
+
     if (__TEST__) {
       log.warn("DEV or TEST env doesn't trigger SMS sending")
       resolve()
     }
-    nexmo.message.sendSms(from, to, text, opts, (err, data) => {
+    nexmo.message.sendSms(FROM, to, text, OPTS, (err, data) => {
       /** *
        * data :
             { 'message-count': '1',
@@ -54,14 +58,10 @@ const send = (phoneNum, text) =>
         const msgInfo = data.messages[0]
         if (msgInfo.status === '0') {
           log.info(`Sended SMS to [${to}]. message_id: ${msgInfo['message-id']}`)
+        } else if (nexmoErrRef[msgInfo.status]) {
+          reject(new errors[`${nexmoErrRef[msgInfo.status]}Error`]())
         } else {
-          log.error(
-            new Error(
-              `Sending to [${to}]. An error occurred, Error code : ${
-                msgInfo.status
-              }, Error message : ${msgInfo['error-text']}`
-            )
-          )
+          return reject(new Error(msgInfo['error-text']))
         }
         resolve(msgInfo)
       }
@@ -73,16 +73,40 @@ const send = (phoneNum, text) =>
  * @param {String} mobile_list
  * @param {String} content
  */
-const sendGroup = async (mobile_list, content) => {
-  const res = []
+const sendGroup = (mobile_list, content) => new Promise((success, fail) => {
+  const nexmo = new Nexmo({
+    apiKey: config.apiKey,
+    apiSecret: config.apiSecret
+  })
+  const promiseArr = []
   const phoneArr = typeof mobile_list === 'string' ? mobile_list.split(',') : ''
-  for (const mb of phoneArr) {
-    /* eslint-disable no-await-in-loop */
-    const msgInfo = await send(mb, content)
-    if (msgInfo.status === '0') res.push(msgInfo.to)
+  for (const to of phoneArr) {
+    promiseArr.push(
+      new Promise((resolve, reject) => {
+        nexmo.message.sendSms(FROM, to, content, OPTS, (err, data) => {
+          if (err) return reject(err)
+          const resInfo = data.messages[0]
+          if (resInfo.status !== '0') {
+            return reject(resInfo)
+          }
+          resolve(resInfo)
+        })
+      })
+    )
   }
-  return res
-}
+  Promise.all(promiseArr)
+    .then(results => {
+      const sentMobileArr = results.map(m => m.to)
+      const msgIdArr = results.map(m => m['message-id'])
+      log.info(`Sended SMS to [${sentMobileArr.join(',')}]. message_id: ${msgIdArr.join(',')}`)
+      success(sentMobileArr)
+    })
+    .catch(reason => {
+      if (nexmoErrRef[reason.status]) {
+        fail(new errors[`${nexmoErrRef[reason.status]}Error`]())
+      }
+    })
+})
 
 module.exports = {
   send,
